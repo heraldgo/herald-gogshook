@@ -13,7 +13,7 @@ const filterGogsHookName = "gogs_hook"
 // CreateTrigger create a new trigger
 func CreateTrigger(name string) (interface{}, error) {
 	if name != triggerGogsHookName {
-		return nil, fmt.Errorf("Trigger \"%s\" not found", name)
+		return nil, fmt.Errorf("Trigger \"%s\" is not in plugin \"gogshook\"", name)
 	}
 
 	return &trigger.GogsHook{}, nil
@@ -22,7 +22,7 @@ func CreateTrigger(name string) (interface{}, error) {
 // CreateFilter create a new filter
 func CreateFilter(name string) (interface{}, error) {
 	if name != filterGogsHookName {
-		return nil, fmt.Errorf("Filter \"%s\" not found", name)
+		return nil, fmt.Errorf("Filter \"%s\" is not in plugin \"gogshook\"", name)
 	}
 
 	return &filter.GogsHook{}, nil

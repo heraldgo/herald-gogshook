@@ -1,2 +1,7 @@
 # herald-gogshook
-Herald plugin for gogs hook
+
+Herald plugin for gogs hook. Build with
+
+```
+go build --buildmode=plugin
+```
