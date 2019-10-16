@@ -14,28 +14,21 @@ type GogsHook struct {
 
 // Filter will only pass with specified repo and branch
 func (flt *GogsHook) Filter(triggerParam, filterParam map[string]interface{}) (map[string]interface{}, bool) {
-	repository, ok := triggerParam["repository"]
-	if !ok {
-		flt.Errorf("[Filter(GogsHook)] Invalid gogs hook request: key \"repository\" not found")
+	event, _ := util.GetStringParam(triggerParam, "event")
+	gogsEvent, _ := util.GetStringParam(filterParam, "gogs_event")
+	if gogsEvent != "" && gogsEvent != event {
+		flt.Debugf("[Filter(GogsHook)] Event does not match: \"%s\"", event)
 		return nil, false
 	}
 
-	repositoryMap, ok := repository.(map[string]interface{})
-	if !ok {
-		flt.Errorf("[Filter(GogsHook)] Invalid gogs hook request: \"payload[repository]\" is not a map")
-		return nil, false
-	}
+	payloadParam, _ := util.GetMapParam(triggerParam, "payload")
+	repositoryParam, _ := util.GetMapParam(payloadParam, "repository")
 
-	repositoryName, _ := repositoryMap["name"]
-	repoName, _ := repositoryName.(string)
+	repoName, _ := util.GetStringParam(repositoryParam, "name")
+	repoFullName, _ := util.GetStringParam(repositoryParam, "full_name")
+	cloneURL, _ := util.GetStringParam(repositoryParam, "clone_url")
 
-	repositoryFullName, _ := repositoryMap["full_name"]
-	repoFullName, _ := repositoryFullName.(string)
-
-	repositoryCloneURL, _ := repositoryMap["clone_url"]
-	cloneURL, _ := repositoryCloneURL.(string)
-
-	ref, _ := triggerParam["ref"]
+	ref, _ := payloadParam["ref"]
 	repoRef, _ := ref.(string)
 	refFrag := strings.Split(repoRef, "/")
 	branch := refFrag[len(refFrag)-1]
@@ -76,8 +69,9 @@ func (flt *GogsHook) Filter(triggerParam, filterParam map[string]interface{}) (m
 	}
 
 	result := map[string]interface{}{
-		"gogs_clone_url": cloneURL,
-		"gogs_branch":    branch,
+		"event":     branch,
+		"clone_url": cloneURL,
+		"branch":    branch,
 	}
 
 	return result, true
