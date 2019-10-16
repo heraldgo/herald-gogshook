@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/xianghuzhao/herald-gogshook/util"
+	"github.com/heraldgo/herald-gogshook/util"
 )
 
 // GogsHook is a filter only pass with specified repo and branch

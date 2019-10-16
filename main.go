@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/xianghuzhao/herald-gogshook/filter"
-	"github.com/xianghuzhao/herald-gogshook/trigger"
+	"github.com/heraldgo/herald-gogshook/filter"
+	"github.com/heraldgo/herald-gogshook/trigger"
 )
 
 const triggerGogsHookName = "gogs_hook"

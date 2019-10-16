@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/xianghuzhao/herald-gogshook/util"
+	"github.com/heraldgo/herald-gogshook/util"
 )
 
 // GogsHook is a trigger which will listen to http request
