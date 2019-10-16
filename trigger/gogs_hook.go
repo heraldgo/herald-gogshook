@@ -39,8 +39,19 @@ func (tgr *GogsHook) Run(ctx context.Context, param chan map[string]interface{})
 
 	requestChan := make(chan map[string]interface{})
 
-	tgr.ProcessFunc = func(w http.ResponseWriter, reqParam map[string]interface{}) {
-		requestChan <- reqParam
+	tgr.ProcessFunc = func(w http.ResponseWriter, r *http.Request, body []byte) {
+		bodyMap, err := util.JSONToMap(body)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			w.Write([]byte(fmt.Sprintf("Request body error: %s", err)))
+			return
+		}
+
+		result := make(map[string]interface{})
+		result["event"] = r.Header.Get("X-Gogs-Event")
+		result["payload"] = bodyMap
+
+		requestChan <- result
 		w.Write([]byte("Gogs param received and trigger activated\n"))
 	}
 

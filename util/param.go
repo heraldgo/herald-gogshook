@@ -1,6 +1,8 @@
 package util
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -29,6 +31,31 @@ func InterfaceMapToStringMap(param interface{}) interface{} {
 	}
 
 	return param
+}
+
+// JSONToMap convert json to map
+func JSONToMap(text []byte) (map[string]interface{}, error) {
+	var outputJSON interface{}
+	err := json.Unmarshal(text, &outputJSON)
+	if err != nil {
+		return nil, fmt.Errorf("Parse json error (%s)", err)
+	}
+	outputMap, ok := outputJSON.(map[string]interface{})
+	if !ok {
+		return nil, errors.New("Input json is not a map")
+	}
+	return outputMap, nil
+}
+
+// TextToMap convert json text to map
+func TextToMap(text []byte) map[string]interface{} {
+	outputMap, err := JSONToMap(text)
+	if err != nil {
+		return map[string]interface{}{
+			"output": string(text),
+		}
+	}
+	return outputMap
 }
 
 // GetStringParam get the string param from the map
