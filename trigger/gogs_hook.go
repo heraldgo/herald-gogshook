@@ -55,9 +55,8 @@ func (tgr *GogsHook) Run(ctx context.Context, param chan map[string]interface{})
 		w.Write([]byte("Gogs param received and trigger activated\n"))
 	}
 
-	go func() {
-		tgr.HTTPServer.Run(ctx)
-	}()
+	tgr.Start()
+	defer tgr.Stop()
 
 	for {
 		select {
@@ -67,12 +66,4 @@ func (tgr *GogsHook) Run(ctx context.Context, param chan map[string]interface{})
 			param <- reqParam
 		}
 	}
-}
-
-// SetParam will set param from a map
-func (tgr *GogsHook) SetParam(param map[string]interface{}) {
-	util.UpdateStringParam(&tgr.UnixSocket, param, "unix_socket")
-	util.UpdateStringParam(&tgr.Host, param, "host")
-	util.UpdateIntParam(&tgr.Port, param, "port")
-	util.UpdateStringParam(&tgr.Secret, param, "secret")
 }

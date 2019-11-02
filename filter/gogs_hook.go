@@ -17,7 +17,7 @@ func (flt *GogsHook) Filter(triggerParam, filterParam map[string]interface{}) (m
 	event, _ := util.GetStringParam(triggerParam, "event")
 	gogsEvent, _ := util.GetStringParam(filterParam, "gogs_event")
 	if gogsEvent != "" && gogsEvent != event {
-		flt.Debugf("[Filter(GogsHook)] Event does not match: \"%s\"", event)
+		flt.Debugf(`[Filter(GogsHook)] Event does not match: "%s"`, event)
 		return nil, false
 	}
 
@@ -35,7 +35,7 @@ func (flt *GogsHook) Filter(triggerParam, filterParam map[string]interface{}) (m
 
 	repoParsed, err := url.Parse(cloneURL)
 	if err != nil {
-		flt.Errorf("[Filter(GogsHook)] Invalid clone url: \"%s\"", cloneURL)
+		flt.Errorf(`[Filter(GogsHook)] Invalid clone url: "%s"`, cloneURL)
 		return nil, false
 	}
 	host := strings.SplitN(repoParsed.Host, ":", 2)[0]
@@ -45,24 +45,24 @@ func (flt *GogsHook) Filter(triggerParam, filterParam map[string]interface{}) (m
 	gogsBranch, _ := util.GetStringParam(filterParam, "gogs_branch")
 
 	if gogsHost != "" && gogsHost != host {
-		flt.Debugf("[Filter(GogsHook)] Host does not match: \"%s\"", host)
+		flt.Debugf(`[Filter(GogsHook)] Host does not match: "%s"`, host)
 		return nil, false
 	}
 
 	if gogsBranch != "" && gogsBranch != branch {
-		flt.Debugf("[Filter(GogsHook)] Branch does not match: \"%s\"", branch)
+		flt.Debugf(`[Filter(GogsHook)] Branch does not match: "%s"`, branch)
 		return nil, false
 	}
 
 	if gogsName != "" {
 		if strings.ContainsAny(gogsName, "/") {
 			if gogsName != repoFullName {
-				flt.Debugf("[Filter(GogsHook)] Name does not match: \"%s\"", repoFullName)
+				flt.Debugf(`[Filter(GogsHook)] Name does not match: "%s"`, repoFullName)
 				return nil, false
 			}
 		} else {
 			if gogsName != repoName {
-				flt.Debugf("[Filter(GogsHook)] Full name does not match: \"%s\"", repoName)
+				flt.Debugf(`[Filter(GogsHook)] Full name does not match: "%s"`, repoName)
 				return nil, false
 			}
 		}
