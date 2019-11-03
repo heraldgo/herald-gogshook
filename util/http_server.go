@@ -63,13 +63,13 @@ func (h *HTTPServer) createServerUnixSocket() {
 
 	ln, err := net.Listen("unix", h.UnixSocket)
 	if err != nil {
-		h.Errorf("[Util(HTTPServer)] Failed to listen to unix socket: %s", err)
+		h.Errorf("Failed to listen to unix socket: %s", err)
 		return
 	}
 
 	err = os.Chmod(h.UnixSocket, 0777)
 	if err != nil {
-		h.Errorf("[Util(HTTPServer)] Failed to chmod unix socket: %s", err)
+		h.Errorf("Failed to chmod unix socket: %s", err)
 		return
 	}
 
@@ -77,11 +77,11 @@ func (h *HTTPServer) createServerUnixSocket() {
 		Handler: http.HandlerFunc(h.handleFunc),
 	}
 
-	h.Infof("[Util(HTTPServer)] Starting server on unix socket: %s", h.UnixSocket)
+	h.Infof("Starting server on unix socket: %s", h.UnixSocket)
 
 	go func() {
 		if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
-			h.Errorf("[Util(HTTPServer)] Server listen on unix socket error: %s", err)
+			h.Errorf("Server listen on unix socket error: %s", err)
 		}
 	}()
 
@@ -97,11 +97,11 @@ func (h *HTTPServer) createServerTCPPort() {
 
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
-		h.Errorf("[Util(HTTPServer)] Failed to listen to tcp port: %s", err)
+		h.Errorf("Failed to listen to tcp port: %s", err)
 		return
 	}
 
-	h.Infof("[Util(HTTPServer)] Starting server on tcp port: %s", addr)
+	h.Infof("Starting server on tcp port: %s", addr)
 
 	srv := &http.Server{
 		Handler: http.HandlerFunc(h.handleFunc),
@@ -109,7 +109,7 @@ func (h *HTTPServer) createServerTCPPort() {
 
 	go func() {
 		if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
-			h.Errorf("[Util(HTTPServer)] Server listen on tcp port error: %s", err)
+			h.Errorf("Server listen on tcp port error: %s", err)
 		}
 	}()
 
@@ -119,7 +119,7 @@ func (h *HTTPServer) createServerTCPPort() {
 func (h *HTTPServer) shutdownServerUnixSocket() {
 	if h.srvUnix != nil {
 		if err := h.srvUnix.Shutdown(context.Background()); err != nil {
-			h.Errorf("[Util(HTTPServer)] HTTPServer server on unix socket shutdown error: %s", err)
+			h.Errorf("HTTPServer server on unix socket shutdown error: %s", err)
 		}
 		h.srvUnix = nil
 	}
@@ -128,7 +128,7 @@ func (h *HTTPServer) shutdownServerUnixSocket() {
 func (h *HTTPServer) shutdownServerTCPPort() {
 	if h.srvTCP != nil {
 		if err := h.srvTCP.Shutdown(context.Background()); err != nil {
-			h.Errorf("[Util(HTTPServer)] HTTPServer server on tcp port shutdown error: %s", err)
+			h.Errorf("HTTPServer server on tcp port shutdown error: %s", err)
 		}
 		h.srvTCP = nil
 	}
