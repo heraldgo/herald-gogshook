@@ -34,7 +34,7 @@ func (tgr *GogsHook) validateGogs(r *http.Request, body []byte) error {
 }
 
 // Run the GogsHook trigger
-func (tgr *GogsHook) Run(ctx context.Context, param chan map[string]interface{}) {
+func (tgr *GogsHook) Run(ctx context.Context, sendParam func(map[string]interface{})) {
 	tgr.ValidateFunc = tgr.validateGogs
 
 	requestChan := make(chan map[string]interface{})
@@ -63,7 +63,7 @@ func (tgr *GogsHook) Run(ctx context.Context, param chan map[string]interface{})
 		case <-ctx.Done():
 			return
 		case reqParam := <-requestChan:
-			param <- reqParam
+			sendParam(reqParam)
 		}
 	}
 }
