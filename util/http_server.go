@@ -7,6 +7,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 // HTTPServer is a trigger which will listen to http request
@@ -61,6 +62,13 @@ func (h *HTTPServer) createServerUnixSocket() {
 
 	os.Remove(h.UnixSocket)
 
+	socketDir := filepath.Dir(h.UnixSocket)
+	err := os.MkdirAll(socketDir, 0755)
+	if err != nil {
+		h.Errorf(`Create socket directory "%s" failed: %s`, socketDir, err)
+		return
+	}
+
 	ln, err := net.Listen("unix", h.UnixSocket)
 	if err != nil {
 		h.Errorf("Failed to listen to unix socket: %s", err)
@@ -77,7 +85,7 @@ func (h *HTTPServer) createServerUnixSocket() {
 		Handler: http.HandlerFunc(h.handleFunc),
 	}
 
-	h.Infof("Starting server on unix socket: %s", h.UnixSocket)
+	h.Infof("Starting http server on unix socket: %s", h.UnixSocket)
 
 	go func() {
 		if err := srv.Serve(ln); err != nil && err != http.ErrServerClosed {
@@ -101,7 +109,7 @@ func (h *HTTPServer) createServerTCPPort() {
 		return
 	}
 
-	h.Infof("Starting server on tcp port: %s", addr)
+	h.Infof("Starting http server on tcp port: %s", addr)
 
 	srv := &http.Server{
 		Handler: http.HandlerFunc(h.handleFunc),

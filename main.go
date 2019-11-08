@@ -3,13 +3,15 @@ package main
 import (
 	"fmt"
 
-	"github.com/heraldgo/herald-gogshook/filter"
+	"github.com/heraldgo/herald-gogshook/selector"
+	"github.com/heraldgo/herald-gogshook/transformer"
 	"github.com/heraldgo/herald-gogshook/trigger"
 	"github.com/heraldgo/herald-gogshook/util"
 )
 
 const triggerGogsHookName = "gogs_hook"
-const filterGogsHookName = "gogs_hook"
+const selectorGogsHookName = "gogs_hook"
+const transformerGogsHookName = "gogs_hook"
 
 // CreateTrigger create a new trigger
 func CreateTrigger(name string, param map[string]interface{}) (interface{}, error) {
@@ -38,11 +40,20 @@ func CreateTrigger(name string, param map[string]interface{}) (interface{}, erro
 	return tgr, nil
 }
 
-// CreateFilter create a new filter
-func CreateFilter(name string, param map[string]interface{}) (interface{}, error) {
-	if name != filterGogsHookName {
-		return nil, fmt.Errorf(`Filter "%s" is not in plugin "gogshook"`, name)
+// CreateSelector create a new selector
+func CreateSelector(name string, param map[string]interface{}) (interface{}, error) {
+	if name != selectorGogsHookName {
+		return nil, fmt.Errorf(`Selector "%s" is not in plugin "gogshook"`, name)
 	}
 
-	return &filter.GogsHook{}, nil
+	return &selector.GogsHook{}, nil
+}
+
+// CreateTransformer create a new transformer
+func CreateTransformer(name string, param map[string]interface{}) (interface{}, error) {
+	if name != transformerGogsHookName {
+		return nil, fmt.Errorf(`Transformer "%s" is not in plugin "gogshook"`, name)
+	}
+
+	return &transformer.GogsHook{}, nil
 }
