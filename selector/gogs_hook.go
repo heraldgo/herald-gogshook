@@ -13,11 +13,11 @@ type GogsHook struct {
 }
 
 // Select will only pass with specified repo
-func (slt *GogsHook) Select(triggerParam, selectorParam map[string]interface{}) bool {
+func (slt *GogsHook) Select(triggerParam, jobParam map[string]interface{}) bool {
 	mainParam := util.GogsParam(triggerParam)
 
 	event := mainParam["event"]
-	gogsEvent, _ := util.GetStringParam(selectorParam, "gogs_event")
+	gogsEvent, _ := util.GetStringParam(jobParam, "gogs_event")
 	if gogsEvent != "" && gogsEvent != event {
 		slt.Debugf(`Event does not match: "%s"`, event)
 		return false
@@ -30,9 +30,9 @@ func (slt *GogsHook) Select(triggerParam, selectorParam map[string]interface{}) 
 	}
 	host := strings.SplitN(repoParsed.Host, ":", 2)[0]
 
-	gogsHost, _ := util.GetStringParam(selectorParam, "gogs_host")
-	gogsName, _ := util.GetStringParam(selectorParam, "gogs_name")
-	gogsBranch, _ := util.GetStringParam(selectorParam, "gogs_branch")
+	gogsHost, _ := util.GetStringParam(jobParam, "gogs_host")
+	gogsName, _ := util.GetStringParam(jobParam, "gogs_name")
+	gogsBranch, _ := util.GetStringParam(jobParam, "gogs_branch")
 
 	if gogsHost != "" && gogsHost != host {
 		slt.Debugf(`Host does not match: "%s"`, host)

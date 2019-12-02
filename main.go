@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/heraldgo/herald-gogshook/selector"
-	"github.com/heraldgo/herald-gogshook/transformer"
 	"github.com/heraldgo/herald-gogshook/trigger"
 	"github.com/heraldgo/herald-gogshook/util"
 )
@@ -47,13 +46,4 @@ func CreateSelector(name string, param map[string]interface{}) (interface{}, err
 	}
 
 	return &selector.GogsHook{}, nil
-}
-
-// CreateTransformer create a new transformer
-func CreateTransformer(name string, param map[string]interface{}) (interface{}, error) {
-	if name != transformerGogsHookName {
-		return nil, fmt.Errorf(`Transformer "%s" is not in plugin "gogshook"`, name)
-	}
-
-	return &transformer.GogsHook{}, nil
 }
