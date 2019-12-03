@@ -13,9 +13,9 @@ const selectorGogsHookName = "gogs_hook"
 const transformerGogsHookName = "gogs_hook"
 
 // CreateTrigger create a new trigger
-func CreateTrigger(name string, param map[string]interface{}) (interface{}, error) {
-	if name != triggerGogsHookName {
-		return nil, fmt.Errorf(`Trigger "%s" is not in plugin "gogshook"`, name)
+func CreateTrigger(typeName string, param map[string]interface{}) (interface{}, error) {
+	if typeName != triggerGogsHookName {
+		return nil, fmt.Errorf(`Trigger "%s" is not in plugin "gogshook"`, typeName)
 	}
 
 	unixSocket, _ := util.GetStringParam(param, "unix_socket")
@@ -40,9 +40,9 @@ func CreateTrigger(name string, param map[string]interface{}) (interface{}, erro
 }
 
 // CreateSelector create a new selector
-func CreateSelector(name string, param map[string]interface{}) (interface{}, error) {
-	if name != selectorGogsHookName {
-		return nil, fmt.Errorf(`Selector "%s" is not in plugin "gogshook"`, name)
+func CreateSelector(typeName string, param map[string]interface{}) (interface{}, error) {
+	if typeName != selectorGogsHookName {
+		return nil, fmt.Errorf(`Selector "%s" is not in plugin "gogshook"`, typeName)
 	}
 
 	return &selector.GogsHook{}, nil
