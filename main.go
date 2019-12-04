@@ -24,8 +24,11 @@ func CreateTrigger(typeName string, param map[string]interface{}) (interface{}, 
 	secret, _ := util.GetStringParam(param, "secret")
 
 	if port == 0 && unixSocket == "" {
-		host = "127.0.0.1"
 		port = 8234
+	}
+
+	if port != 0 && host == "" {
+		host = "127.0.0.1"
 	}
 
 	tgr := &trigger.GogsHook{
